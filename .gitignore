@@ -1,4 +1,21 @@
+# Dependencies
 node_modules/
+
+# Environment variables / private information
 .env
+.env.*
+
+# Hardhat generated files
+artifacts/
+cache/
+types/
+
+# Test coverage
+coverage/
+
+# Build files
 build/
-.cache/
+
+# Operating system files
+.DS_Store
+Thumbs.db
