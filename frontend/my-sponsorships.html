@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Certificates | Yala Leopard Conservation</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-brand">Yala Leopard Conservation</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="register.html">Register</a>
+      <a href="my-sponsorships.html">My Certificates</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <button id="connectWalletBtn" class="btn-primary">Connect Wallet</button>
+    <span id="walletAddress" class="wallet-address"></span>
+  </header>
+
+  <section class="featured">
+    <h1>My Sponsorship Certificates</h1>
+    <div id="mySponsorshipsList">
+      <p class="placeholder-text">Connect your wallet to view your certificates.</p>
+    </div>
+  </section>
+
+  <!-- Transfer certificate modal (simple inline form) -->
+  <section id="transferPanel" class="form-container" style="display:none;">
+    <h2>Transfer Certificate</h2>
+    <div class="form-group">
+      <label for="transferRecipient">Recipient wallet address</label>
+      <input type="text" id="transferRecipient" placeholder="0x...">
+    </div>
+    <button id="confirmTransferBtn" class="btn-primary">Confirm Transfer</button>
+    <button id="cancelTransferBtn" class="btn-secondary">Cancel</button>
+  </section>
+
+  <!-- Sell / list for sponsorship modal -->
+  <section id="sellPanel" class="form-container" style="display:none;">
+    <h2>List Certificate for Sponsorship</h2>
+    <div class="form-group">
+      <label for="sellPrice">Sale price (ETH)</label>
+      <input type="number" id="sellPrice" step="0.001" min="0" placeholder="0.05">
+    </div>
+    <button id="confirmSellBtn" class="btn-primary">Confirm Listing</button>
+    <button id="cancelSellBtn" class="btn-secondary">Cancel</button>
+  </section>
+
+  <footer>
+    <p>DAS5003 Blockchain Fundamentals &mdash; PRAC1 Section 3 Group Project</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/sponsorships.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yala Leopard Conservation Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- ethers.js for talking to the smart contract -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== Nav bar ===== -->
+  <header class="navbar">
+    <div class="nav-brand">Yala Leopard Conservation</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="register.html">Register</a>
+      <a href="my-sponsorships.html">My Certificates</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <button id="connectWalletBtn" class="btn-primary">Connect Wallet</button>
+    <span id="walletAddress" class="wallet-address"></span>
+  </header>
+
+  <!-- ===== Hero section ===== -->
+  <section class="hero">
+    <h1>Sponsor a Yala Leopard</h1>
+    <p>
+      Each leopard in Yala National Park is uniquely identified by its spot pattern.
+      Sponsor a leopard on-chain and receive a transparent, tradeable conservation
+      certificate — every sponsorship helps fund conservation efforts.
+    </p>
+    <a href="marketplace.html" class="btn-primary">Browse Leopards</a>
+  </section>
+
+  <!-- ===== Featured leopards preview ===== -->
+  <section class="featured">
+    <h2>Featured Leopards</h2>
+    <div id="featuredList" class="card-grid">
+      <!-- populated by js/marketplace.js -->
+      <p class="placeholder-text">Loading featured leopards...</p>
+    </div>
+  </section>
+
+  <!-- ===== How it works ===== -->
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Connect Wallet</h3>
+        <p>Connect MetaMask to interact with the marketplace on Sepolia testnet.</p>
+      </div>
+      <div class="step">
+        <h3>2. Choose a Leopard</h3>
+        <p>Browse registered leopards and view their sponsorship history.</p>
+      </div>
+      <div class="step">
+        <h3>3. Sponsor</h3>
+        <p>Receive a unique on-chain certificate. Sponsorship funds go directly to conservation.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>DAS5003 Blockchain Fundamentals &mdash; PRAC1 Section 3 Group Project</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/marketplace.js"></script>
+</body>
+</html>
