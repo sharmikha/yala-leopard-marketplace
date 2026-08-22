@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace | Yala Leopard Conservation</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-brand">Yala Leopard Conservation</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="register.html">Register</a>
+      <a href="my-sponsorships.html">My Certificates</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <button id="connectWalletBtn" class="btn-primary">Connect Wallet</button>
+    <span id="walletAddress" class="wallet-address"></span>
+  </header>
+
+  <section class="featured">
+    <h1>Browse Leopards</h1>
+
+    <div class="form-group">
+      <input type="text" id="searchInput" placeholder="Search by ID or territory...">
+    </div>
+
+    <div id="allLeopardsList" class="card-grid">
+      <p class="placeholder-text">Loading leopards...</p>
+    </div>
+  </section>
+
+  <!-- Simple modal-style detail panel (avoids needing a separate detail.html) -->
+  <section id="leopardDetailPanel" class="form-container" style="display:none;">
+    <button id="closeDetailBtn" class="btn-secondary">Close</button>
+    <div id="leopardDetailContent"></div>
+    <h3>Sponsorship History</h3>
+    <table>
+      <thead>
+        <tr><th>From</th><th>To</th><th>Amount</th><th>Date</th></tr>
+      </thead>
+      <tbody id="historyTableBody"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>DAS5003 Blockchain Fundamentals &mdash; PRAC1 Section 3 Group Project</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/marketplace.js"></script>
+</body>
+</html>
