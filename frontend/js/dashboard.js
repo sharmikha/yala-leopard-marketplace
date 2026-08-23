@@ -21,12 +21,27 @@ async function loadDashboard() {
     }
 
     await Promise.all([
-      loadDashboardTotals(dashboardContract),
-      loadTopHolders(dashboardContract),
-      loadOwnershipRecords(dashboardContract),
+      loadDashboardTotals(
+        dashboardContract
+      ),
+
+      loadTopHolders(
+        dashboardContract
+      ),
+
+      loadOwnershipRecords(
+        dashboardContract
+      ),
+
+      loadConservationFund(
+        dashboardContract
+      ),
     ]);
 
-    showDashboardStatus("", false);
+    showDashboardStatus(
+      "",
+      false
+    );
 
   } catch (error) {
     console.error(
@@ -89,7 +104,8 @@ async function loadDashboardTotals(
   dashboardContract
 ) {
   const totalAssets =
-    await dashboardContract.totalAssets();
+    await dashboardContract
+      .totalAssets();
 
   const totalTransactions =
     await dashboardContract
@@ -144,13 +160,14 @@ async function loadTopHolders(
 
   for (const address of participants) {
     const balance =
-      await dashboardContract.balanceOf(
-        address
-      );
+      await dashboardContract
+        .balanceOf(
+          address
+        );
 
     /*
-     * Only include wallets that currently hold
-     * at least one sponsorship certificate.
+     * Only include wallets that currently
+     * hold at least one certificate.
      */
     if (balance > 0n) {
       holders.push({
@@ -160,19 +177,24 @@ async function loadTopHolders(
     }
   }
 
+
   /*
-   * Top-holder ranking is intentionally performed
-   * in JavaScript rather than inside Solidity.
-   *
-   * This avoids expensive on-chain sorting and gas.
+   * Ranking is performed in JavaScript
+   * to avoid expensive on-chain sorting.
    */
   holders.sort(
     (a, b) => {
-      if (a.balance > b.balance) {
+      if (
+        a.balance >
+        b.balance
+      ) {
         return -1;
       }
 
-      if (a.balance < b.balance) {
+      if (
+        a.balance <
+        b.balance
+      ) {
         return 1;
       }
 
@@ -180,12 +202,19 @@ async function loadTopHolders(
     }
   );
 
+
   const topTen =
-    holders.slice(0, 10);
+    holders.slice(
+      0,
+      10
+    );
 
-  tableBody.innerHTML = "";
+  tableBody.innerHTML =
+    "";
 
-  if (topTen.length === 0) {
+  if (
+    topTen.length === 0
+  ) {
     tableBody.innerHTML = `
       <tr>
         <td colspan="3">
@@ -197,19 +226,24 @@ async function loadTopHolders(
     return;
   }
 
+
   topTen.forEach(
     (holder, index) => {
       const row =
-        document.createElement("tr");
+        document.createElement(
+          "tr"
+        );
 
       row.innerHTML = `
         <td>
           ${index + 1}
         </td>
 
-        <td title="${escapeDashboardHTML(
-          holder.address
-        )}">
+        <td
+          title="${escapeDashboardHTML(
+            holder.address
+          )}"
+        >
           ${shortenDashboardAddress(
             holder.address
           )}
@@ -220,7 +254,9 @@ async function loadTopHolders(
         </td>
       `;
 
-      tableBody.appendChild(row);
+      tableBody.appendChild(
+        row
+      );
     }
   );
 }
@@ -251,6 +287,7 @@ async function loadOwnershipRecords(
 
   const records = [];
 
+
   const transactionTypes = [
     "Mint",
     "Initial Sponsorship",
@@ -258,9 +295,12 @@ async function loadOwnershipRecords(
     "Secondary Resale",
   ];
 
+
   for (const leopard of leopards) {
     const tokenId =
-      Number(leopard.tokenId);
+      Number(
+        leopard.tokenId
+      );
 
     const history =
       await dashboardContract
@@ -268,7 +308,10 @@ async function loadOwnershipRecords(
           tokenId
         );
 
-    for (const record of history) {
+    for (
+      const record
+      of history
+    ) {
       const typeIndex =
         Number(
           record.transactionType
@@ -276,18 +319,25 @@ async function loadOwnershipRecords(
 
       records.push({
         tokenId,
+
         leopardId:
           leopard.leopardId,
+
         leopardName:
           leopard.name,
+
         from:
           record.from,
+
         to:
           record.to,
+
         price:
           record.price,
+
         timestamp:
           record.timestamp,
+
         transactionType:
           transactionTypes[
             typeIndex
@@ -296,18 +346,29 @@ async function loadOwnershipRecords(
     }
   }
 
+
   /*
-   * Display newest blockchain records first.
+   * Display newest blockchain
+   * records first.
    */
   records.sort(
     (a, b) =>
-      Number(b.timestamp) -
-      Number(a.timestamp)
+      Number(
+        b.timestamp
+      ) -
+      Number(
+        a.timestamp
+      )
   );
 
-  tableBody.innerHTML = "";
 
-  if (records.length === 0) {
+  tableBody.innerHTML =
+    "";
+
+
+  if (
+    records.length === 0
+  ) {
     tableBody.innerHTML = `
       <tr>
         <td colspan="8">
@@ -319,20 +380,31 @@ async function loadOwnershipRecords(
     return;
   }
 
-  for (const record of records) {
+
+  for (
+    const record
+    of records
+  ) {
     const row =
-      document.createElement("tr");
+      document.createElement(
+        "tr"
+      );
+
 
     const date =
       new Date(
-        Number(record.timestamp) *
+        Number(
+          record.timestamp
+        ) *
         1000
       );
+
 
     const priceEth =
       ethers.formatEther(
         record.price
       );
+
 
     row.innerHTML = `
       <td>
@@ -357,17 +429,21 @@ async function loadOwnershipRecords(
         )}
       </td>
 
-      <td title="${escapeDashboardHTML(
-        record.from
-      )}">
+      <td
+        title="${escapeDashboardHTML(
+          record.from
+        )}"
+      >
         ${formatDashboardAddress(
           record.from
         )}
       </td>
 
-      <td title="${escapeDashboardHTML(
-        record.to
-      )}">
+      <td
+        title="${escapeDashboardHTML(
+          record.to
+        )}"
+      >
         ${formatDashboardAddress(
           record.to
         )}
@@ -384,7 +460,290 @@ async function loadOwnershipRecords(
       </td>
     `;
 
-    tableBody.appendChild(row);
+
+    tableBody.appendChild(
+      row
+    );
+  }
+}
+
+
+// ============================================================
+// LOAD CONSERVATION FUND
+// ============================================================
+
+async function loadConservationFund(
+  dashboardContract
+) {
+  try {
+    const fundAddress =
+      await dashboardContract
+        .conservationFund();
+
+
+    const fundElement =
+      document.getElementById(
+        "currentConservationFund"
+      );
+
+
+    if (fundElement) {
+      fundElement.textContent =
+        shortenDashboardAddress(
+          fundAddress
+        );
+
+      fundElement.title =
+        fundAddress;
+    }
+
+  } catch (error) {
+    console.error(
+      "Could not load conservation fund:",
+      error
+    );
+  }
+}
+
+
+// ============================================================
+// UPDATE CONSERVATION FUND
+// ============================================================
+
+async function updateConservationFundFromDashboard() {
+  const addressInput =
+    document.getElementById(
+      "newConservationFund"
+    );
+
+
+  if (!addressInput) {
+    console.error(
+      "Conservation fund input not found."
+    );
+    return;
+  }
+
+
+  const newAddress =
+    addressInput.value.trim();
+
+
+  if (!newAddress) {
+    showConservationFundStatus(
+      "Please enter a wallet address.",
+      true
+    );
+    return;
+  }
+
+
+  if (
+    !ethers.isAddress(
+      newAddress
+    )
+  ) {
+    showConservationFundStatus(
+      "Please enter a valid Ethereum address.",
+      true
+    );
+    return;
+  }
+
+
+  if (
+    newAddress.toLowerCase() ===
+    ethers.ZeroAddress.toLowerCase()
+  ) {
+    showConservationFundStatus(
+      "The zero address cannot be used as the conservation fund.",
+      true
+    );
+    return;
+  }
+
+
+  try {
+    const marketplaceContract =
+      await getConnectedContract();
+
+
+    if (!marketplaceContract) {
+      showConservationFundStatus(
+        "Please connect your MetaMask wallet.",
+        true
+      );
+      return;
+    }
+
+
+    const account =
+      await getConnectedAccount();
+
+
+    if (!account) {
+      showConservationFundStatus(
+        "Wallet is not connected.",
+        true
+      );
+      return;
+    }
+
+
+    const contractOwner =
+      await marketplaceContract
+        .owner();
+
+
+    if (
+      account.toLowerCase() !==
+      contractOwner.toLowerCase()
+    ) {
+      showConservationFundStatus(
+        "Only the contract administrator can update the conservation fund.",
+        true
+      );
+      return;
+    }
+
+
+    const currentFund =
+      await marketplaceContract
+        .conservationFund();
+
+
+    if (
+      currentFund.toLowerCase() ===
+      newAddress.toLowerCase()
+    ) {
+      showConservationFundStatus(
+        "This address is already the conservation fund.",
+        true
+      );
+      return;
+    }
+
+
+    showConservationFundStatus(
+      "Please confirm the transaction in MetaMask...",
+      false
+    );
+
+
+    const transaction =
+      await marketplaceContract
+        .updateConservationFund(
+          newAddress
+        );
+
+
+    showConservationFundStatus(
+      "Transaction submitted. Waiting for confirmation...",
+      false
+    );
+
+
+    await transaction.wait();
+
+
+    showConservationFundStatus(
+      "Conservation fund updated successfully.",
+      false
+    );
+
+
+    addressInput.value =
+      "";
+
+
+    const dashboardContract =
+      await getDashboardContract();
+
+
+    if (dashboardContract) {
+      await loadConservationFund(
+        dashboardContract
+      );
+    }
+
+  } catch (error) {
+    console.error(
+      "Conservation fund update failed:",
+      error
+    );
+
+
+    if (
+      error?.code === 4001 ||
+      error?.code ===
+        "ACTION_REJECTED"
+    ) {
+      showConservationFundStatus(
+        "Transaction was cancelled in MetaMask.",
+        true
+      );
+
+      return;
+    }
+
+
+    showConservationFundStatus(
+      "Could not update the conservation fund.",
+      true
+    );
+  }
+}
+
+
+// ============================================================
+// CONSERVATION FUND STATUS
+// ============================================================
+
+function showConservationFundStatus(
+  message,
+  isError
+) {
+  const statusElement =
+    document.getElementById(
+      "conservationFundStatus"
+    );
+
+
+  if (!statusElement) {
+    if (isError) {
+      console.error(
+        message
+      );
+    } else {
+      console.log(
+        message
+      );
+    }
+
+    return;
+  }
+
+
+  statusElement.textContent =
+    message;
+
+
+  if (isError) {
+    statusElement.classList.add(
+      "error"
+    );
+
+    statusElement.classList.remove(
+      "success"
+    );
+  } else {
+    statusElement.classList.add(
+      "success"
+    );
+
+    statusElement.classList.remove(
+      "error"
+    );
   }
 }
 
@@ -401,9 +760,14 @@ function shortenDashboardAddress(
   }
 
   return (
-    address.slice(0, 6) +
+    address.slice(
+      0,
+      6
+    ) +
     "..." +
-    address.slice(-4)
+    address.slice(
+      -4
+    )
   );
 }
 
@@ -415,12 +779,14 @@ function formatDashboardAddress(
     return "";
   }
 
+
   if (
     address.toLowerCase() ===
     ethers.ZeroAddress.toLowerCase()
   ) {
     return "Mint";
   }
+
 
   return shortenDashboardAddress(
     address
@@ -441,20 +807,27 @@ function showDashboardStatus(
       "dashboardStatus"
     );
 
+
   if (!statusElement) {
     if (message) {
       if (isError) {
-        console.error(message);
+        console.error(
+          message
+        );
       } else {
-        console.log(message);
+        console.log(
+          message
+        );
       }
     }
 
     return;
   }
 
+
   statusElement.textContent =
     message;
+
 
   if (isError) {
     statusElement.classList.add(
@@ -490,11 +863,24 @@ function escapeDashboardHTML(
     return "";
   }
 
+
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
     .replaceAll(
       "'",
       "&#039;"
@@ -509,6 +895,23 @@ function escapeDashboardHTML(
 document.addEventListener(
   "DOMContentLoaded",
   async function () {
+
+    const updateFundButton =
+      document.getElementById(
+        "updateConservationFundBtn"
+      );
+
+
+    if (updateFundButton) {
+      updateFundButton.addEventListener(
+        "click",
+        async function () {
+          await updateConservationFundFromDashboard();
+        }
+      );
+    }
+
+
     const dashboardExists =
       document.getElementById(
         "totalAssetsCount"
@@ -521,7 +924,11 @@ document.addEventListener(
       ) ||
       document.getElementById(
         "ownershipRecordsTableBody"
+      ) ||
+      document.getElementById(
+        "currentConservationFund"
       );
+
 
     if (dashboardExists) {
       await loadDashboard();

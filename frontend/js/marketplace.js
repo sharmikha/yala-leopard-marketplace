@@ -1,5 +1,9 @@
 let marketplaceContractRead = null;
 
+// Store loaded leopards so search can filter
+// without calling the blockchain every time.
+let marketplaceLeopards = [];
+
 async function getReadOnlyContract() {
   try {
     if (!provider) {
@@ -19,7 +23,10 @@ async function getReadOnlyContract() {
 
     return marketplaceContractRead;
   } catch (error) {
-    console.error("Could not create read-only contract:", error);
+    console.error(
+      "Could not create read-only contract:",
+      error
+    );
     return null;
   }
 }
@@ -29,7 +36,9 @@ async function loadMarketplace() {
     document.getElementById("marketplaceGrid");
 
   if (!marketplaceGrid) {
-    console.warn("marketplaceGrid element not found.");
+    console.warn(
+      "marketplaceGrid element not found."
+    );
     return;
   }
 
@@ -53,30 +62,41 @@ async function loadMarketplace() {
     const leopards =
       await readContract.getAllLeopards();
 
+    marketplaceLeopards =
+      Array.from(leopards);
+
     marketplaceGrid.innerHTML = "";
 
-    if (!leopards || leopards.length === 0) {
+    if (
+      !marketplaceLeopards ||
+      marketplaceLeopards.length === 0
+    ) {
       marketplaceGrid.innerHTML = `
         <div class="empty-marketplace">
-          <p>No leopards have been registered yet.</p>
+          <p>
+            No leopards have been registered yet.
+          </p>
         </div>
       `;
 
-      showMarketplaceStatus("", false);
+      showMarketplaceStatus(
+        "",
+        false
+      );
+
       return;
     }
 
-    for (const leopard of leopards) {
-      const card =
-        await createLeopardCard(
-          readContract,
-          leopard
-        );
+    await displayMarketplaceLeopards(
+      readContract,
+      marketplaceLeopards
+    );
 
-      marketplaceGrid.appendChild(card);
-    }
+    showMarketplaceStatus(
+      "",
+      false
+    );
 
-    showMarketplaceStatus("", false);
   } catch (error) {
     console.error(
       "Failed to load marketplace:",
@@ -90,6 +110,125 @@ async function loadMarketplace() {
   }
 }
 
+
+// ============================================================
+// DISPLAY MARKETPLACE LEOPARDS
+// ============================================================
+
+async function displayMarketplaceLeopards(
+  readContract,
+  leopards
+) {
+  const marketplaceGrid =
+    document.getElementById(
+      "marketplaceGrid"
+    );
+
+  if (!marketplaceGrid) {
+    return;
+  }
+
+  marketplaceGrid.innerHTML = "";
+
+  if (
+    !leopards ||
+    leopards.length === 0
+  ) {
+    marketplaceGrid.innerHTML = `
+      <div class="empty-marketplace">
+        <p>
+          No matching leopards found.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  for (const leopard of leopards) {
+    const card =
+      await createLeopardCard(
+        readContract,
+        leopard
+      );
+
+    marketplaceGrid.appendChild(
+      card
+    );
+  }
+}
+
+
+// ============================================================
+// SEARCH MARKETPLACE
+// ============================================================
+
+async function filterMarketplace() {
+  const searchInput =
+    document.getElementById(
+      "searchInput"
+    );
+
+  if (!searchInput) {
+    return;
+  }
+
+  const searchTerm =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  const readContract =
+    await getReadOnlyContract();
+
+  if (!readContract) {
+    return;
+  }
+
+  if (!searchTerm) {
+    await displayMarketplaceLeopards(
+      readContract,
+      marketplaceLeopards
+    );
+
+    return;
+  }
+
+  const filteredLeopards =
+    marketplaceLeopards.filter(
+      (leopard) => {
+        const leopardId =
+          String(
+            leopard.leopardId
+          ).toLowerCase();
+
+        const territory =
+          String(
+            leopard.territory
+          ).toLowerCase();
+
+        return (
+          leopardId.includes(
+            searchTerm
+          ) ||
+          territory.includes(
+            searchTerm
+          )
+        );
+      }
+    );
+
+  await displayMarketplaceLeopards(
+    readContract,
+    filteredLeopards
+  );
+}
+
+
+// ============================================================
+// CREATE LEOPARD CARD
+// ============================================================
+
 async function createLeopardCard(
   readContract,
   leopard
@@ -98,15 +237,22 @@ async function createLeopardCard(
     Number(leopard.tokenId);
 
   const currentOwner =
-    await readContract.ownerOf(tokenId);
+    await readContract.ownerOf(
+      tokenId
+    );
 
   const priceEth =
-    ethers.formatEther(leopard.price);
+    ethers.formatEther(
+      leopard.price
+    );
 
   const card =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  card.className = "leopard-card";
+  card.className =
+    "leopard-card";
 
   const statusText =
     leopard.forSale
@@ -147,48 +293,75 @@ async function createLeopardCard(
 
   card.innerHTML = `
     <div class="leopard-image-wrapper">
+
       <img
-        src="${escapeHTML(leopard.imageURI)}"
-        alt="${escapeHTML(leopard.name)}"
+        src="${escapeHTML(
+          leopard.imageURI
+        )}"
+        alt="${escapeHTML(
+          leopard.name
+        )}"
         class="leopard-image"
       >
+
     </div>
 
     <div class="leopard-card-body">
+
       <h3>
-        ${escapeHTML(leopard.name)}
+        ${escapeHTML(
+          leopard.name
+        )}
       </h3>
 
       <p>
-        <strong>Leopard ID:</strong>
-        ${escapeHTML(leopard.leopardId)}
+        <strong>
+          Leopard ID:
+        </strong>
+        ${escapeHTML(
+          leopard.leopardId
+        )}
       </p>
 
       <p>
-        <strong>Territory:</strong>
-        ${escapeHTML(leopard.territory)}
+        <strong>
+          Territory:
+        </strong>
+        ${escapeHTML(
+          leopard.territory
+        )}
       </p>
 
       <p>
-        <strong>Conservation Status:</strong>
+        <strong>
+          Conservation Status:
+        </strong>
         ${escapeHTML(
           leopard.conservationStatus
         )}
       </p>
 
       <p>
-        <strong>Status:</strong>
+        <strong>
+          Status:
+        </strong>
         ${statusText}
       </p>
 
       <p>
-        <strong>Price:</strong>
+        <strong>
+          Price:
+        </strong>
         ${priceEth} ETH
       </p>
 
       <p>
-        <strong>Current Certificate Holder:</strong>
-        ${shortenAddress(currentOwner)}
+        <strong>
+          Current Certificate Holder:
+        </strong>
+        ${shortenAddress(
+          currentOwner
+        )}
       </p>
 
       <button
@@ -200,11 +373,19 @@ async function createLeopardCard(
       </button>
 
       ${actionButton}
+
     </div>
   `;
 
+
+  // ----------------------------------------------------------
+  // SPONSOR BUTTON
+  // ----------------------------------------------------------
+
   const sponsorButton =
-    card.querySelector(".sponsor-btn");
+    card.querySelector(
+      ".sponsor-btn"
+    );
 
   if (sponsorButton) {
     sponsorButton.addEventListener(
@@ -218,8 +399,15 @@ async function createLeopardCard(
     );
   }
 
+
+  // ----------------------------------------------------------
+  // RESALE BUTTON
+  // ----------------------------------------------------------
+
   const resaleButton =
-    card.querySelector(".resale-btn");
+    card.querySelector(
+      ".resale-btn"
+    );
 
   if (resaleButton) {
     resaleButton.addEventListener(
@@ -233,8 +421,15 @@ async function createLeopardCard(
     );
   }
 
+
+  // ----------------------------------------------------------
+  // DETAILS BUTTON
+  // ----------------------------------------------------------
+
   const detailsButton =
-    card.querySelector(".view-details-btn");
+    card.querySelector(
+      ".view-details-btn"
+    );
 
   if (detailsButton) {
     detailsButton.addEventListener(
@@ -250,6 +445,11 @@ async function createLeopardCard(
 
   return card;
 }
+
+
+// ============================================================
+// INITIAL SPONSORSHIP
+// ============================================================
 
 async function sponsorLeopardFromMarketplace(
   tokenId,
@@ -305,6 +505,7 @@ async function sponsorLeopardFromMarketplace(
     );
 
     await loadMarketplace();
+
   } catch (error) {
     console.error(
       "Sponsorship failed:",
@@ -320,6 +521,11 @@ async function sponsorLeopardFromMarketplace(
     );
   }
 }
+
+
+// ============================================================
+// SECONDARY RESALE PURCHASE
+// ============================================================
 
 async function purchaseResaleFromMarketplace(
   tokenId,
@@ -349,9 +555,10 @@ async function purchaseResaleFromMarketplace(
     }
 
     const currentOwner =
-      await marketplaceContract.ownerOf(
-        tokenId
-      );
+      await marketplaceContract
+        .ownerOf(
+          tokenId
+        );
 
     if (
       currentOwner.toLowerCase() ===
@@ -391,6 +598,7 @@ async function purchaseResaleFromMarketplace(
     );
 
     await loadMarketplace();
+
   } catch (error) {
     console.error(
       "Resale purchase failed:",
@@ -407,12 +615,19 @@ async function purchaseResaleFromMarketplace(
   }
 }
 
+
+// ============================================================
+// LEOPARD DETAILS
+// ============================================================
+
 function showLeopardDetails(
   leopard,
   currentOwner
 ) {
   const priceEth =
-    ethers.formatEther(leopard.price);
+    ethers.formatEther(
+      leopard.price
+    );
 
   const message = `
 ${leopard.name}
@@ -428,35 +643,62 @@ Current Certificate Holder: ${currentOwner}
   alert(message);
 }
 
+
+// ============================================================
+// MARKETPLACE STATUS
+// ============================================================
+
 function showMarketplaceStatus(
   message,
   isError
 ) {
   const statusElement =
-    document.getElementById("marketplaceStatus");
+    document.getElementById(
+      "marketplaceStatus"
+    );
 
   if (!statusElement) {
     if (message) {
       if (isError) {
-        console.error(message);
+        console.error(
+          message
+        );
       } else {
-        console.log(message);
+        console.log(
+          message
+        );
       }
     }
 
     return;
   }
 
-  statusElement.textContent = message;
+  statusElement.textContent =
+    message;
 
   if (isError) {
-    statusElement.classList.add("error");
-    statusElement.classList.remove("success");
+    statusElement.classList.add(
+      "error"
+    );
+
+    statusElement.classList.remove(
+      "success"
+    );
   } else {
-    statusElement.classList.add("success");
-    statusElement.classList.remove("error");
+    statusElement.classList.add(
+      "success"
+    );
+
+    statusElement.classList.remove(
+      "error"
+    );
   }
 }
+
+
+// ============================================================
+// TRANSACTION ERROR MESSAGE
+// ============================================================
 
 function getTransactionErrorMessage(
   error,
@@ -464,9 +706,12 @@ function getTransactionErrorMessage(
 ) {
   if (
     error?.code === 4001 ||
-    error?.code === "ACTION_REJECTED"
+    error?.code ===
+      "ACTION_REJECTED"
   ) {
-    return "Transaction was cancelled in MetaMask.";
+    return (
+      "Transaction was cancelled in MetaMask."
+    );
   }
 
   const reason =
@@ -484,28 +729,73 @@ function getTransactionErrorMessage(
   return defaultMessage;
 }
 
-function escapeHTML(value) {
-  if (value === null || value === undefined) {
+
+// ============================================================
+// SAFE HTML OUTPUT
+// ============================================================
+
+function escapeHTML(
+  value
+) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
     return "";
   }
 
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 }
+
+
+// ============================================================
+// PAGE LOAD
+// ============================================================
 
 document.addEventListener(
   "DOMContentLoaded",
   async function () {
+
     if (
       document.getElementById(
         "marketplaceGrid"
       )
     ) {
       await loadMarketplace();
+    }
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+    if (searchInput) {
+      searchInput.addEventListener(
+        "input",
+        async function () {
+          await filterMarketplace();
+        }
+      );
     }
   }
 );
