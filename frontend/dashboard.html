@@ -1,72 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard | Yala Leopard Conservation</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Dashboard | Yala Leopard Conservation
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"
+  ></script>
 </head>
+
+
 <body>
 
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
   <header class="navbar">
-    <div class="nav-brand">Yala Leopard Conservation</div>
-    <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="marketplace.html">Marketplace</a>
-      <a href="register.html">Register</a>
-      <a href="my-sponsorships.html">My Certificates</a>
-      <a href="dashboard.html">Dashboard</a>
-    </nav>
-    <button id="connectWalletBtn" class="btn-primary">Connect Wallet</button>
-    <span id="walletAddress" class="wallet-address"></span>
-  </header>
 
-  <section class="featured">
-    <h1>Conservation Dashboard</h1>
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="value" id="totalLeopards">--</div>
-        <div>Total Leopards</div>
-      </div>
-      <div class="stat-card">
-        <div class="value" id="totalSponsorships">--</div>
-        <div>Total Sponsorships</div>
-      </div>
-      <div class="stat-card">
-        <div class="value" id="fundsRaised">--</div>
-        <div>Funds Raised (ETH)</div>
-      </div>
+    <div class="nav-brand">
+      Yala Leopard Conservation
     </div>
 
-    <h2>Top 10 Sponsors</h2>
+    <nav class="nav-links">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="marketplace.html">
+        Marketplace
+      </a>
+
+      <a href="register.html">
+        Register
+      </a>
+
+      <a href="my-sponsorships.html">
+        My Certificates
+      </a>
+
+      <a href="dashboard.html">
+        Dashboard
+      </a>
+
+    </nav>
+
+
+    <button
+      id="connectWalletBtn"
+      class="btn-primary"
+    >
+      Connect Wallet
+    </button>
+
+
+    <span
+      id="walletAddress"
+      class="wallet-address"
+    ></span>
+
+  </header>
+
+
+  <!-- =========================
+       DASHBOARD
+  ========================== -->
+
+  <section class="featured">
+
+    <h1>
+      Conservation Dashboard
+    </h1>
+
+    <p>
+      View live blockchain statistics,
+      certificate holders and ownership activity
+      recorded by the Yala Leopard Conservation
+      Marketplace.
+    </p>
+
+
+    <!-- Dashboard loading / error messages -->
+
+    <p
+      id="dashboardStatus"
+      class="placeholder-text"
+    ></p>
+
+
+    <!-- =========================
+         SUMMARY STATISTICS
+    ========================== -->
+
+    <div class="stats-row">
+
+      <div class="stat-card">
+
+        <div
+          class="value"
+          id="totalAssetsCount"
+        >
+          --
+        </div>
+
+        <div>
+          Total Registered Leopards
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div
+          class="value"
+          id="totalTransactionsCount"
+        >
+          --
+        </div>
+
+        <div>
+          Total Marketplace Transactions
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         CONSERVATION FUND ADMIN
+    ========================== -->
+
+    <section class="form-container">
+
+      <h2>
+        Conservation Fund Administration
+      </h2>
+
+      <p>
+        Only the contract administrator can update
+        the conservation fund wallet address.
+      </p>
+
+      <p>
+        <strong>
+          Current Conservation Fund:
+        </strong>
+
+        <span id="currentConservationFund">
+          Loading...
+        </span>
+      </p>
+
+
+      <div class="form-group">
+
+        <label for="newConservationFund">
+          New Conservation Fund Address
+        </label>
+
+        <input
+          type="text"
+          id="newConservationFund"
+          placeholder="0x..."
+        >
+
+      </div>
+
+
+      <button
+        type="button"
+        id="updateConservationFundBtn"
+        class="btn-primary"
+      >
+        Update Conservation Fund
+      </button>
+
+
+      <p
+        id="conservationFundStatus"
+        class="placeholder-text"
+      ></p>
+
+    </section>
+
+
+    <!-- =========================
+         TOP CERTIFICATE HOLDERS
+    ========================== -->
+
+    <h2>
+      Top 10 Certificate Holders
+    </h2>
+
     <table>
+
       <thead>
-        <tr><th>#</th><th>Address</th><th>Certificates Held</th></tr>
+
+        <tr>
+          <th>#</th>
+          <th>Wallet Address</th>
+          <th>Certificates Held</th>
+        </tr>
+
       </thead>
-      <tbody id="topSponsorsBody">
-        <tr><td colspan="3" class="placeholder-text">Connect your wallet to load dashboard data.</td></tr>
+
+
+      <tbody id="topHoldersTableBody">
+
+        <tr>
+          <td
+            colspan="3"
+            class="placeholder-text"
+          >
+            Loading certificate holders...
+          </td>
+        </tr>
+
       </tbody>
+
     </table>
 
-    <h2>Recent Sponsorship Activity</h2>
+
+    <!-- =========================
+         OWNERSHIP RECORDS
+    ========================== -->
+
+    <h2>
+      Ownership and Sponsorship Activity
+    </h2>
+
     <table>
+
       <thead>
-        <tr><th>Leopard</th><th>From</th><th>To</th><th>Amount</th><th>Date</th></tr>
+
+        <tr>
+          <th>Token</th>
+          <th>Leopard ID</th>
+          <th>Leopard Name</th>
+          <th>Transaction Type</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Price</th>
+          <th>Date</th>
+        </tr>
+
       </thead>
-      <tbody id="recentActivityBody">
-        <tr><td colspan="5" class="placeholder-text">No activity loaded yet.</td></tr>
+
+
+      <tbody id="ownershipRecordsTableBody">
+
+        <tr>
+          <td
+            colspan="8"
+            class="placeholder-text"
+          >
+            Loading blockchain ownership records...
+          </td>
+        </tr>
+
       </tbody>
+
     </table>
+
   </section>
 
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
   <footer>
-    <p>DAS5003 Blockchain Fundamentals &mdash; PRAC1 Section 3 Group Project</p>
+
+    <p>
+      DAS5003 Blockchain Fundamentals &mdash;
+      PRAC1 Section 3 Group Project
+    </p>
+
   </footer>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
 
   <script src="js/config.js"></script>
   <script src="js/wallet.js"></script>
   <script src="js/dashboard.js"></script>
+
 </body>
+
 </html>
