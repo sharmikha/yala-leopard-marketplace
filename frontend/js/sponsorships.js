@@ -4,7 +4,9 @@
 
 async function loadMySponsorships() {
   const sponsorshipsGrid =
-    document.getElementById("mySponsorshipsGrid");
+    document.getElementById(
+      "mySponsorshipsGrid"
+    );
 
   if (!sponsorshipsGrid) {
     console.warn(
@@ -52,7 +54,8 @@ async function loadMySponsorships() {
     }
 
     const leopards =
-      await marketplaceContract.getAllLeopards();
+      await marketplaceContract
+        .getAllLeopards();
 
     sponsorshipsGrid.innerHTML = "";
 
@@ -88,7 +91,11 @@ async function loadMySponsorships() {
         </div>
       `;
 
-      showSponsorshipsStatus("", false);
+      showSponsorshipsStatus(
+        "",
+        false
+      );
+
       return;
     }
 
@@ -98,10 +105,15 @@ async function loadMySponsorships() {
           item.leopard
         );
 
-      sponsorshipsGrid.appendChild(card);
+      sponsorshipsGrid.appendChild(
+        card
+      );
     }
 
-    showSponsorshipsStatus("", false);
+    showSponsorshipsStatus(
+      "",
+      false
+    );
 
   } catch (error) {
     console.error(
@@ -121,15 +133,21 @@ async function loadMySponsorships() {
 // CREATE SPONSORSHIP CARD
 // ============================================================
 
-function createSponsorshipCard(leopard) {
+function createSponsorshipCard(
+  leopard
+) {
   const tokenId =
     Number(leopard.tokenId);
 
   const priceEth =
-    ethers.formatEther(leopard.price);
+    ethers.formatEther(
+      leopard.price
+    );
 
   const card =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   card.className =
     "sponsorship-card";
@@ -139,12 +157,16 @@ function createSponsorshipCard(leopard) {
   if (leopard.forSale) {
     saleSection = `
       <p>
-        <strong>Marketplace Status:</strong>
+        <strong>
+          Marketplace Status:
+        </strong>
         Listed for Resale
       </p>
 
       <p>
-        <strong>Resale Price:</strong>
+        <strong>
+          Resale Price:
+        </strong>
         ${priceEth} ETH
       </p>
 
@@ -159,11 +181,14 @@ function createSponsorshipCard(leopard) {
   } else {
     saleSection = `
       <p>
-        <strong>Marketplace Status:</strong>
+        <strong>
+          Marketplace Status:
+        </strong>
         Not Listed
       </p>
 
       <div class="resale-form">
+
         <input
           type="number"
           id="resalePrice-${tokenId}"
@@ -179,12 +204,14 @@ function createSponsorshipCard(leopard) {
         >
           List for Resale
         </button>
+
       </div>
     `;
   }
 
   card.innerHTML = `
     <div class="sponsorship-image-wrapper">
+
       <img
         src="${escapeSponsorshipHTML(
           leopard.imageURI
@@ -194,6 +221,7 @@ function createSponsorshipCard(leopard) {
         )}"
         class="sponsorship-image"
       >
+
     </div>
 
     <div class="sponsorship-card-body">
@@ -205,26 +233,34 @@ function createSponsorshipCard(leopard) {
       </h3>
 
       <p>
-        <strong>Certificate Token:</strong>
+        <strong>
+          Certificate Token:
+        </strong>
         #${tokenId}
       </p>
 
       <p>
-        <strong>Leopard ID:</strong>
+        <strong>
+          Leopard ID:
+        </strong>
         ${escapeSponsorshipHTML(
           leopard.leopardId
         )}
       </p>
 
       <p>
-        <strong>Territory:</strong>
+        <strong>
+          Territory:
+        </strong>
         ${escapeSponsorshipHTML(
           leopard.territory
         )}
       </p>
 
       <p>
-        <strong>Conservation Status:</strong>
+        <strong>
+          Conservation Status:
+        </strong>
         ${escapeSponsorshipHTML(
           leopard.conservationStatus
         )}
@@ -265,7 +301,7 @@ function createSponsorshipCard(leopard) {
 
 
   // ----------------------------------------------------------
-  // LIST FOR SALE BUTTON
+  // LIST FOR SALE
   // ----------------------------------------------------------
 
   const listButton =
@@ -296,7 +332,7 @@ function createSponsorshipCard(leopard) {
 
 
   // ----------------------------------------------------------
-  // CANCEL SALE BUTTON
+  // CANCEL SALE
   // ----------------------------------------------------------
 
   const cancelButton =
@@ -317,7 +353,7 @@ function createSponsorshipCard(leopard) {
 
 
   // ----------------------------------------------------------
-  // TRANSFER BUTTON
+  // TRANSFER
   // ----------------------------------------------------------
 
   const transferButton =
@@ -348,7 +384,7 @@ function createSponsorshipCard(leopard) {
 
 
   // ----------------------------------------------------------
-  // HISTORY BUTTON
+  // HISTORY
   // ----------------------------------------------------------
 
   const historyButton =
@@ -392,7 +428,9 @@ async function listCertificateForSale(
     Number(resalePrice);
 
   if (
-    Number.isNaN(priceNumber) ||
+    Number.isNaN(
+      priceNumber
+    ) ||
     priceNumber <= 0
   ) {
     showSponsorshipsStatus(
@@ -488,7 +526,9 @@ async function cancelCertificateSale(
 
     const transaction =
       await marketplaceContract
-        .cancelSale(tokenId);
+        .cancelSale(
+          tokenId
+        );
 
     showSponsorshipsStatus(
       "Cancellation submitted. Waiting for confirmation...",
@@ -537,7 +577,11 @@ async function transferCertificate(
     return;
   }
 
-  if (!ethers.isAddress(recipient)) {
+  if (
+    !ethers.isAddress(
+      recipient
+    )
+  ) {
     showSponsorshipsStatus(
       "Please enter a valid Ethereum wallet address.",
       true
@@ -637,11 +681,43 @@ async function showCertificateHistory(
 
     const history =
       await marketplaceContract
-        .getOwnershipHistory(tokenId);
+        .getOwnershipHistory(
+          tokenId
+        );
 
-    if (!history || history.length === 0) {
-      alert(
-        "No ownership history was found."
+    if (
+      !history ||
+      history.length === 0
+    ) {
+      showSponsorshipsStatus(
+        "No ownership history was found.",
+        true
+      );
+      return;
+    }
+
+    const modal =
+      document.getElementById(
+        "historyModal"
+      );
+
+    const modalTitle =
+      document.getElementById(
+        "historyModalTitle"
+      );
+
+    const modalBody =
+      document.getElementById(
+        "historyModalBody"
+      );
+
+    if (
+      !modal ||
+      !modalTitle ||
+      !modalBody
+    ) {
+      console.error(
+        "Ownership history modal elements are missing."
       );
       return;
     }
@@ -653,22 +729,29 @@ async function showCertificateHistory(
       "Secondary Resale",
     ];
 
-    let historyText =
-      `${leopardName} - Ownership History\n\n`;
+    modalTitle.textContent =
+      `${leopardName} - Ownership History`;
+
+    modalBody.innerHTML = "";
 
     history.forEach(
       (record, index) => {
+
+        const typeIndex =
+          Number(
+            record.transactionType
+          );
+
         const transactionType =
           transactionTypes[
-            Number(
-              record.transactionType
-            )
+            typeIndex
           ] || "Unknown";
 
         const date =
           new Date(
-            Number(record.timestamp) *
-            1000
+            Number(
+              record.timestamp
+            ) * 1000
           );
 
         const price =
@@ -676,24 +759,71 @@ async function showCertificateHistory(
             record.price
           );
 
-        historyText +=
-          `${index + 1}. ${transactionType}\n`;
+        const fromAddress =
+          formatHistoryAddress(
+            record.from
+          );
 
-        historyText +=
-          `From: ${record.from}\n`;
+        const toAddress =
+          formatHistoryAddress(
+            record.to
+          );
 
-        historyText +=
-          `To: ${record.to}\n`;
+        const recordElement =
+          document.createElement(
+            "div"
+          );
 
-        historyText +=
-          `Price: ${price} ETH\n`;
+        recordElement.className =
+          "history-record";
 
-        historyText +=
-          `Date: ${date.toLocaleString()}\n\n`;
+        recordElement.innerHTML = `
+          <p>
+            <strong>
+              ${index + 1}.
+              ${escapeSponsorshipHTML(
+                transactionType
+              )}
+            </strong>
+          </p>
+
+          <p>
+            <strong>From:</strong>
+            ${escapeSponsorshipHTML(
+              fromAddress
+            )}
+          </p>
+
+          <p>
+            <strong>To:</strong>
+            ${escapeSponsorshipHTML(
+              toAddress
+            )}
+          </p>
+
+          <p>
+            <strong>Price:</strong>
+            ${escapeSponsorshipHTML(
+              price
+            )} ETH
+          </p>
+
+          <p>
+            <strong>Date:</strong>
+            ${escapeSponsorshipHTML(
+              date.toLocaleString()
+            )}
+          </p>
+        `;
+
+        modalBody.appendChild(
+          recordElement
+        );
       }
     );
 
-    alert(historyText);
+    modal.style.display =
+      "block";
 
   } catch (error) {
     console.error(
@@ -705,6 +835,49 @@ async function showCertificateHistory(
       "Could not retrieve ownership history.",
       true
     );
+  }
+}
+
+
+// ============================================================
+// HISTORY ADDRESS FORMAT
+// ============================================================
+
+function formatHistoryAddress(
+  address
+) {
+  if (!address) {
+    return "";
+  }
+
+  if (
+    address.toLowerCase() ===
+    ethers.ZeroAddress.toLowerCase()
+  ) {
+    return "Mint";
+  }
+
+  return (
+    address.slice(0, 6) +
+    "..." +
+    address.slice(-4)
+  );
+}
+
+
+// ============================================================
+// CLOSE HISTORY MODAL
+// ============================================================
+
+function closeHistoryModal() {
+  const modal =
+    document.getElementById(
+      "historyModal"
+    );
+
+  if (modal) {
+    modal.style.display =
+      "none";
   }
 }
 
@@ -725,9 +898,13 @@ function showSponsorshipsStatus(
   if (!statusElement) {
     if (message) {
       if (isError) {
-        console.error(message);
+        console.error(
+          message
+        );
       } else {
-        console.log(message);
+        console.log(
+          message
+        );
       }
     }
 
@@ -775,7 +952,9 @@ function getSponsorshipErrorMessage(
     );
   }
 
-  if (error?.shortMessage) {
+  if (
+    error?.shortMessage
+  ) {
     console.error(
       "Blockchain error:",
       error.shortMessage
@@ -801,11 +980,26 @@ function escapeSponsorshipHTML(
   }
 
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 }
 
 
@@ -816,6 +1010,41 @@ function escapeSponsorshipHTML(
 document.addEventListener(
   "DOMContentLoaded",
   async function () {
+
+    const closeHistoryButton =
+      document.getElementById(
+        "closeHistoryModalBtn"
+      );
+
+    if (closeHistoryButton) {
+      closeHistoryButton
+        .addEventListener(
+          "click",
+          closeHistoryModal
+        );
+    }
+
+
+    const historyModal =
+      document.getElementById(
+        "historyModal"
+      );
+
+    if (historyModal) {
+      historyModal.addEventListener(
+        "click",
+        function (event) {
+          if (
+            event.target ===
+            historyModal
+          ) {
+            closeHistoryModal();
+          }
+        }
+      );
+    }
+
+
     if (
       document.getElementById(
         "mySponsorshipsGrid"
