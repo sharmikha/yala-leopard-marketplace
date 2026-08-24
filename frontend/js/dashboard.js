@@ -505,6 +505,27 @@ async function loadConservationFund(
   }
 }
 
+async function revealConservationFundPanelIfAdmin() {
+  const panel = document.getElementById("conservationFundAdminPanel");
+  if (!panel) return;
+
+  try {
+    const dashboardContract = await getDashboardContract();
+    if (!dashboardContract) return;
+
+    const account = await getConnectedAccount();
+    if (!account) return; // wallet not connected yet — stays hidden
+
+    const contractOwner = await dashboardContract.owner();
+
+    if (account.toLowerCase() === contractOwner.toLowerCase()) {
+      panel.style.display = "block";
+    }
+  } catch (error) {
+    console.error("Could not verify admin status:", error);
+  }
+}
+
 
 // ============================================================
 // UPDATE CONSERVATION FUND
@@ -932,6 +953,7 @@ document.addEventListener(
 
     if (dashboardExists) {
       await loadDashboard();
+      await revealConservationFundPanelIfAdmin();
     }
   }
 );

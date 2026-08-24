@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leopard Details | Yala Leopard Conservation</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-brand">Yala Leopard Conservation</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="register.html" id="registerNavLink" style="display:none;">Register</a>
+      <a href="my-sponsorships.html">My Certificates</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <button id="connectWalletBtn" class="btn-primary">Connect Wallet</button>
+    <span id="walletAddress" class="wallet-address"></span>
+  </header>
+
+  <section class="featured">
+    <a href="marketplace.html" class="btn-secondary">&larr; Back to Marketplace</a>
+
+    <p id="leopardDetailStatus" class="placeholder-text"></p>
+
+    <div id="leopardDetailContainer"></div>
+
+    <h2>Sponsorship History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Price</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="leopardHistoryTableBody">
+        <tr><td colspan="5" class="placeholder-text">Loading history...</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>DAS5003 Blockchain Fundamentals &mdash; PRAC1 Section 3 Group Project</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/leopard-detail.js"></script>
+</body>
+</html>

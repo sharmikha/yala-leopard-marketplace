@@ -246,3 +246,179 @@ footer {
   color: #95a5a6;
   border-top: 1px solid #e0e0e0;
 }
+
+
+/* ===== My Sponsorships cards ===== */
+.sponsorship-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+}
+
+.sponsorship-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  background-color: #d5dbdb;
+}
+
+.sponsorship-card-body p {
+  margin: 0.4rem 0;
+}
+
+.resale-form,
+.transfer-section {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+
+.resale-form input,
+.transfer-section input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.list-sale-btn,
+.transfer-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+  background-color: #1e8449;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.list-sale-btn:hover,
+.transfer-btn:hover {
+  background-color: #196f3d;
+}
+
+.cancel-sale-btn,
+.history-btn {
+  background-color: #ffffff;
+  color: #1e8449;
+  border: 1px solid #1e8449;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.cancel-sale-btn:hover,
+.history-btn:hover {
+  background-color: #eafaf1;
+}
+
+/* ===== Marketplace / Featured leopard cards ===== */
+.leopard-image-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.leopard-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.leopard-card-body {
+  text-align: left;
+}
+
+.leopard-card-body h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.leopard-card-body p {
+  margin: 0.35rem 0;
+  font-size: 0.9rem;
+}
+
+.leopard-card-body .view-details-btn,
+.leopard-card-body .sponsor-btn,
+.leopard-card-body .resale-btn,
+.leopard-card-body button {
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.leopard-card-body .sponsor-btn,
+.leopard-card-body .resale-btn {
+  background-color: #1e8449;
+  color: #ffffff;
+  border: none;
+}
+
+.leopard-card-body .sponsor-btn:hover,
+.leopard-card-body .resale-btn:hover {
+  background-color: #196f3d;
+}
+
+.leopard-card-body .view-details-btn {
+  background-color: #ffffff;
+  color: #1e8449;
+  border: 1px solid #1e8449;
+}
+
+.leopard-card-body .view-details-btn:hover {
+  background-color: #eafaf1;
+}
+
+.leopard-card-body button:disabled {
+  background-color: #ecf0f1;
+  color: #95a5a6;
+  border: 1px solid #d5dbdb;
+  cursor: not-allowed;
+}
+
+/* ===== Page heading spacing (Dashboard, Marketplace, My Sponsorships) ===== */
+.featured h1 {
+  margin-bottom: 0.75rem;
+}
+
+.featured > p {
+  margin-bottom: 1.75rem;
+  color: #4a4a4a;
+  max-width: 700px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.stats-row {
+  margin-top: 1rem;
+}
+
+.card-grid {
+  margin-top: 0.5rem;
+}
