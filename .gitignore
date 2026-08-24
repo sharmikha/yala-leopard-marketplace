@@ -19,3 +19,5 @@ build/
 # Operating system files
 .DS_Store
 Thumbs.db
+ignition/deployments/
+ignition/parameters.local.json
