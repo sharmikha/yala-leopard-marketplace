@@ -110,8 +110,9 @@ a {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
+  justify-content: center;
+  align
 }
 
 .leopard-card {
@@ -124,10 +125,10 @@ a {
 
 .leopard-card img {
   width: 100%;
-  height: 150px;
+  height: 100%;
   object-fit: cover;
   border-radius: 6px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
   background-color: #d5dbdb;
 }
 
@@ -323,7 +324,7 @@ footer {
 
 .leopard-image-wrapper {
   width: 100%;
-  height: 180px;
+  height: 220px;
   overflow: hidden;
   border-radius: 6px;
   margin-bottom: 0.75rem;
