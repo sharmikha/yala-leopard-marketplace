@@ -207,13 +207,22 @@ async function filterMarketplace() {
             leopard.territory
           ).toLowerCase();
 
+        const name =
+          String(
+            leopard.name
+          ).toLowerCase();
+
         return (
           leopardId.includes(
             searchTerm
           ) ||
           territory.includes(
             searchTerm
+          )  ||
+          name.includes(
+            searchTerm
           )
+          
         );
       }
     );
@@ -431,16 +440,13 @@ async function createLeopardCard(
       ".view-details-btn"
     );
 
-  if (detailsButton) {
-    detailsButton.addEventListener(
-      "click",
+    if (detailsButton) {
+      detailsButton.addEventListener(
+     "click",
       function () {
-        showLeopardDetails(
-          leopard,
-          currentOwner
-        );
-      }
-    );
+      window.location.href = `leopard-detail.html?tokenId=${tokenId}`;
+       }
+     );
   }
 
   return card;
@@ -616,32 +622,7 @@ async function purchaseResaleFromMarketplace(
 }
 
 
-// ============================================================
-// LEOPARD DETAILS
-// ============================================================
 
-function showLeopardDetails(
-  leopard,
-  currentOwner
-) {
-  const priceEth =
-    ethers.formatEther(
-      leopard.price
-    );
-
-  const message = `
-${leopard.name}
-
-Leopard ID: ${leopard.leopardId}
-Territory: ${leopard.territory}
-Conservation Status: ${leopard.conservationStatus}
-Description: ${leopard.description}
-Price: ${priceEth} ETH
-Current Certificate Holder: ${currentOwner}
-  `.trim();
-
-  alert(message);
-}
 
 
 // ============================================================
