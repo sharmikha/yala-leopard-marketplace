@@ -33,6 +33,7 @@ async function connectWallet() {
     );
 
     updateWalletUI();
+    await updateRegisterNavVisibility();
 
     return connectedAccount;
   } catch (error) {
@@ -186,5 +187,29 @@ document.addEventListener(
     }
 
     await getConnectedAccount();
+    await updateRegisterNavVisibility();
   }
 );
+
+async function updateRegisterNavVisibility() {
+  const registerLink = document.getElementById("registerNavLink");
+  if (!registerLink) return;
+
+  try {
+    if (typeof window.ethereum === "undefined") return;
+
+    const readProvider = new ethers.BrowserProvider(window.ethereum);
+    const readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+
+    const accounts = await window.ethereum.request({ method: "eth_accounts" });
+    if (accounts.length === 0) return; // no wallet connected — stays hidden
+
+    const contractOwner = await readContract.owner();
+
+    if (accounts[0].toLowerCase() === contractOwner.toLowerCase()) {
+      registerLink.style.display = "inline";
+    }
+  } catch (error) {
+    console.error("Could not check admin status for nav:", error);
+  }
+}
