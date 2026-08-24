@@ -11,15 +11,13 @@
 
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- ethers.js for blockchain interaction -->
+
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
 </head>
 
 <body>
 
-  <!-- ======================================================
-       NAVIGATION BAR
-       ====================================================== -->
+
 
   <header class="navbar">
 
@@ -50,11 +48,6 @@
 
   </header>
 
-
-  <!-- ======================================================
-       LEOPARD REGISTRATION
-       ====================================================== -->
-
   <section class="form-container">
 
     <h1>Register a New Leopard</h1>
@@ -63,12 +56,6 @@
       Admin only: add a newly identified leopard to the
       conservation registry and mint its sponsorship certificate.
     </p>
-
-
-    <!--
-      IMPORTANT:
-      The IDs in this form correspond directly with register.js.
-    -->
 
     <form id="registerLeopardForm">
 
@@ -91,7 +78,6 @@
       </div>
 
 
-      <!-- Leopard Name -->
 
       <div class="form-group">
 
@@ -109,8 +95,6 @@
       </div>
 
 
-      <!-- Territory -->
-
       <div class="form-group">
 
         <label for="territory">
@@ -125,9 +109,6 @@
         >
 
       </div>
-
-
-      <!-- Description -->
 
       <div class="form-group">
 
@@ -144,8 +125,6 @@
 
       </div>
 
-
-      <!-- Conservation Status -->
 
       <div class="form-group">
 
@@ -175,8 +154,6 @@
       </div>
 
 
-      <!-- Leopard Image -->
-
       <div class="form-group">
 
         <label for="imageURI">
@@ -193,7 +170,6 @@
       </div>
 
 
-      <!-- Sponsorship Price -->
 
       <div class="form-group">
 
@@ -213,7 +189,6 @@
       </div>
 
 
-      <!-- Register Button -->
 
       <button
         type="submit"
@@ -226,7 +201,6 @@
     </form>
 
 
-    <!-- Registration transaction status -->
 
     <p
       id="registrationStatus"
@@ -236,9 +210,6 @@
   </section>
 
 
-  <!-- ======================================================
-       FOOTER
-       ====================================================== -->
 
   <footer>
 
@@ -248,13 +219,6 @@
     </p>
 
   </footer>
-
-
-  <!-- ======================================================
-       JAVASCRIPT
-       Order is important:
-       config -> wallet -> register
-       ====================================================== -->
 
   <script src="js/config.js"></script>
   <script src="js/wallet.js"></script>
