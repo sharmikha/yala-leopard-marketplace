@@ -19,5 +19,6 @@ build/
 # Operating system files
 .DS_Store
 Thumbs.db
+# Local Hardhat deployment files
 ignition/deployments/
 ignition/parameters.local.json
