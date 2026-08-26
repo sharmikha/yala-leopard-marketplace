@@ -95,6 +95,23 @@ async function getDashboardContract() {
   }
 }
 
+    // ============================================================
+// CONSERVATION FUND SHARE PER RECORD
+// ============================================================
+
+function getFundEarned(record) {
+  // transactionType: 0 = Mint, 1 = Initial Sponsorship,
+  // 2 = Transfer/Gift, 3 = Secondary Resale
+  if (record.transactionType === "Initial Sponsorship") {
+    return record.price; // 100% to fund
+  }
+
+  if (record.transactionType === "Secondary Resale") {
+    return record.price / 10n; // 10% to fund
+  }
+
+  return 0n; // Mint and Transfer/Gift move no funds
+}
 
 // ============================================================
 // TOTAL ASSETS + TOTAL TRANSACTIONS
@@ -361,6 +378,19 @@ async function loadOwnershipRecords(
       )
   );
 
+    let fundTotal = 0n;
+  for (const record of records) {
+    fundTotal += getFundEarned(record);
+  }
+
+  const fundTotalElement = document.getElementById(
+    "totalConservationFundEarned"
+  );
+  if (fundTotalElement) {
+    fundTotalElement.textContent =
+      ethers.formatEther(fundTotal) + " ETH";
+  }
+
 
   tableBody.innerHTML =
     "";
@@ -371,7 +401,7 @@ async function loadOwnershipRecords(
   ) {
     tableBody.innerHTML = `
       <tr>
-        <td colspan="8">
+        <td colspan="9">
           No ownership records found.
         </td>
       </tr>
@@ -451,6 +481,10 @@ async function loadOwnershipRecords(
 
       <td>
         ${priceEth} ETH
+      </td>
+
+      <td>
+        ${ethers.formatEther(getFundEarned(record))} ETH
       </td>
 
       <td>
