@@ -112,7 +112,8 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
   justify-content: center;
-  align
+  align-items: start;
+  gap: 1.5rem;
 }
 
 .leopard-card {
