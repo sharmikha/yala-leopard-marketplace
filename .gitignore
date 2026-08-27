@@ -22,3 +22,4 @@ Thumbs.db
 # Local Hardhat deployment files
 ignition/deployments/
 ignition/parameters.local.json
+ignition/parameters.sepolia.json

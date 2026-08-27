@@ -909,9 +909,9 @@ function escapeDashboardHTML(
 }
 
 
-// ============================================================
+
 // PAGE LOAD
-// ============================================================
+
 
 document.addEventListener(
   "DOMContentLoaded",

@@ -111,9 +111,9 @@ async function loadMarketplace() {
 }
 
 
-// ============================================================
+
 // DISPLAY MARKETPLACE LEOPARDS
-// ============================================================
+
 
 async function displayMarketplaceLeopards(
   readContract,
@@ -159,9 +159,9 @@ async function displayMarketplaceLeopards(
 }
 
 
-// ============================================================
+
 // SEARCH MARKETPLACE
-// ============================================================
+
 
 async function filterMarketplace() {
   const searchInput =
@@ -234,9 +234,9 @@ async function filterMarketplace() {
 }
 
 
-// ============================================================
+
 // CREATE LEOPARD CARD
-// ============================================================
+
 
 async function createLeopardCard(
   readContract,
@@ -387,9 +387,9 @@ async function createLeopardCard(
   `;
 
 
-  // ----------------------------------------------------------
+  
   // SPONSOR BUTTON
-  // ----------------------------------------------------------
+  
 
   const sponsorButton =
     card.querySelector(
@@ -409,9 +409,9 @@ async function createLeopardCard(
   }
 
 
-  // ----------------------------------------------------------
+  
   // RESALE BUTTON
-  // ----------------------------------------------------------
+  
 
   const resaleButton =
     card.querySelector(
@@ -431,10 +431,9 @@ async function createLeopardCard(
   }
 
 
-  // ----------------------------------------------------------
+  
   // DETAILS BUTTON
-  // ----------------------------------------------------------
-
+ 
   const detailsButton =
     card.querySelector(
       ".view-details-btn"
@@ -453,9 +452,8 @@ async function createLeopardCard(
 }
 
 
-// ============================================================
+
 // INITIAL SPONSORSHIP
-// ============================================================
 
 async function sponsorLeopardFromMarketplace(
   tokenId,
@@ -529,9 +527,9 @@ async function sponsorLeopardFromMarketplace(
 }
 
 
-// ============================================================
+
 // SECONDARY RESALE PURCHASE
-// ============================================================
+
 
 async function purchaseResaleFromMarketplace(
   tokenId,
@@ -623,11 +621,8 @@ async function purchaseResaleFromMarketplace(
 
 
 
-
-
-// ============================================================
 // MARKETPLACE STATUS
-// ============================================================
+
 
 function showMarketplaceStatus(
   message,
@@ -677,9 +672,9 @@ function showMarketplaceStatus(
 }
 
 
-// ============================================================
+
 // TRANSACTION ERROR MESSAGE
-// ============================================================
+
 
 function getTransactionErrorMessage(
   error,
@@ -711,9 +706,9 @@ function getTransactionErrorMessage(
 }
 
 
-// ============================================================
+
 // SAFE HTML OUTPUT
-// ============================================================
+
 
 function escapeHTML(
   value
@@ -749,9 +744,9 @@ function escapeHTML(
 }
 
 
-// ============================================================
+
 // PAGE LOAD
-// ============================================================
+
 
 document.addEventListener(
   "DOMContentLoaded",

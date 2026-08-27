@@ -7,10 +7,6 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
 
-    // =============================================================
-    // CUSTOM ERRORS
-    // =============================================================
-
     error InvalidAddress();
     error EmptyLeopardId();
     error EmptyName();
@@ -32,20 +28,12 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
     error SameConservationFund();
     error DirectTransferDisabled();
 
-    // =============================================================
-    // ENUM
-    // =============================================================
-
     enum TransactionType {
         MINT,
         SPONSORSHIP,
         TRANSFER,
         RESALE
     }
-
-    // =============================================================
-    // DATA STRUCTURES
-    // =============================================================
 
     struct Leopard {
         uint256 tokenId;
@@ -68,10 +56,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         TransactionType transactionType;
     }
 
-    // =============================================================
-    // STATE VARIABLES
-    // =============================================================
-
     address payable public conservationFund;
 
     uint256 public totalAssets;
@@ -84,13 +68,7 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
     address[] private participants;
     mapping(address => bool) private knownParticipant;
 
-    // Used to ensure ownership changes only happen through
-    // approved marketplace functions.
     bool private marketplaceTransfer;
-
-    // =============================================================
-    // EVENTS
-    // =============================================================
 
     event LeopardRegistered(
         uint256 indexed tokenId,
@@ -134,12 +112,11 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         address indexed newFund
     );
 
-    // =============================================================
-    // CONSTRUCTOR
-    // =============================================================
-
     constructor(address payable _conservationFund)
-        ERC721("Yala Leopard Sponsorship Certificate", "YLSC")
+        ERC721(
+            "Yala Leopard Sponsorship Certificate",
+            "YLSC"
+        )
         Ownable(msg.sender)
     {
         if (_conservationFund == address(0)) {
@@ -148,10 +125,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
 
         conservationFund = _conservationFund;
     }
-
-    // =============================================================
-    // REGISTER LEOPARD
-    // =============================================================
 
     function registerLeopard(
         string calldata _leopardId,
@@ -203,10 +176,8 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
 
         leopardIdExists[_leopardId] = true;
 
-        // Mint the sponsorship certificate initially to the admin.
         _safeMint(msg.sender, tokenId);
 
-        // Include the admin in holder tracking.
         _addParticipant(msg.sender);
 
         ownershipHistory[tokenId].push(
@@ -226,10 +197,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             _sponsorshipPrice
         );
     }
-
-    // =============================================================
-    // INITIAL SPONSORSHIP
-    // =============================================================
 
     function sponsorLeopard(uint256 _tokenId)
         external
@@ -279,8 +246,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             totalTransactions++;
         }
 
-        // Initial sponsorship:
-        // 100% of the payment goes to the Conservation Fund.
         (bool success, ) = conservationFund.call{
             value: msg.value
         }("");
@@ -295,10 +260,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             msg.value
         );
     }
-
-    // =============================================================
-    // LIST CERTIFICATE FOR RESALE
-    // =============================================================
 
     function listForSale(
         uint256 _tokenId,
@@ -334,10 +295,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         );
     }
 
-    // =============================================================
-    // CANCEL RESALE LISTING
-    // =============================================================
-
     function cancelSale(uint256 _tokenId) external {
         _requireExists(_tokenId);
 
@@ -358,10 +315,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             msg.sender
         );
     }
-
-    // =============================================================
-    // SECONDARY RESALE
-    // =============================================================
 
     function purchaseResale(uint256 _tokenId)
         external
@@ -386,11 +339,9 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             revert IncorrectPayment();
         }
 
-        // 10% conservation contribution.
         uint256 conservationShare = msg.value / 10;
-
-        // Remaining 90% goes to the seller.
-        uint256 sellerShare = msg.value - conservationShare;
+        uint256 sellerShare =
+            msg.value - conservationShare;
 
         leopard.forSale = false;
 
@@ -424,9 +375,10 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             revert SellerPaymentFailed();
         }
 
-        (bool conservationPaid, ) = conservationFund.call{
-            value: conservationShare
-        }("");
+        (bool conservationPaid, ) =
+            conservationFund.call{
+                value: conservationShare
+            }("");
 
         if (!conservationPaid) {
             revert ConservationPaymentFailed();
@@ -439,10 +391,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             msg.value
         );
     }
-
-    // =============================================================
-    // TRANSFER / GIFT CERTIFICATE
-    // =============================================================
 
     function transferCertificate(
         uint256 _tokenId,
@@ -468,8 +416,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             revert NotSponsored();
         }
 
-        // Remove the certificate from the marketplace
-        // if it was listed for resale.
         leopard.forSale = false;
 
         address previousOwner = msg.sender;
@@ -503,10 +449,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         );
     }
 
-    // =============================================================
-    // UPDATE CONSERVATION FUND
-    // =============================================================
-
     function updateConservationFund(
         address payable _newConservationFund
     ) external onlyOwner {
@@ -514,23 +456,23 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
             revert InvalidAddress();
         }
 
-        if (_newConservationFund == conservationFund) {
+        if (
+            _newConservationFund ==
+            conservationFund
+        ) {
             revert SameConservationFund();
         }
 
         address oldFund = conservationFund;
 
-        conservationFund = _newConservationFund;
+        conservationFund =
+            _newConservationFund;
 
         emit ConservationFundUpdated(
             oldFund,
             _newConservationFund
         );
     }
-
-    // =============================================================
-    // READ FUNCTIONS
-    // =============================================================
 
     function getLeopard(
         uint256 _tokenId
@@ -548,8 +490,12 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         Leopard[] memory allLeopards =
             new Leopard[](totalAssets);
 
-        for (uint256 i = 0; i < totalAssets; ) {
-            allLeopards[i] = leopards[i + 1];
+        for (
+            uint256 i = 0;
+            i < totalAssets;
+        ) {
+            allLeopards[i] =
+                leopards[i + 1];
 
             unchecked {
                 ++i;
@@ -579,14 +525,13 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         return participants;
     }
 
-    // =============================================================
-    // INTERNAL HELPERS
-    // =============================================================
-
     function _requireExists(
         uint256 _tokenId
     ) internal view {
-        if (_ownerOf(_tokenId) == address(0)) {
+        if (
+            _ownerOf(_tokenId) ==
+            address(0)
+        ) {
             revert LeopardNotFound();
         }
     }
@@ -594,9 +539,15 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
     function _addParticipant(
         address _participant
     ) internal {
-        if (!knownParticipant[_participant]) {
-            knownParticipant[_participant] = true;
-            participants.push(_participant);
+        if (
+            !knownParticipant[_participant]
+        ) {
+            knownParticipant[_participant] =
+                true;
+
+            participants.push(
+                _participant
+            );
         }
     }
 
@@ -616,10 +567,6 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         marketplaceTransfer = false;
     }
 
-    // =============================================================
-    // CONTROL ERC-721 OWNERSHIP CHANGES
-    // =============================================================
-
     function _update(
         address to,
         uint256 tokenId,
@@ -629,15 +576,9 @@ contract LeopardMarketplace is ERC721, Ownable, ReentrancyGuard {
         override
         returns (address)
     {
-        address currentOwner = _ownerOf(tokenId);
+        address currentOwner =
+            _ownerOf(tokenId);
 
-        /*
-         * Minting is allowed because a newly created token
-         * does not yet have a current owner.
-         *
-         * Once the token exists, ownership changes are allowed
-         * only through this marketplace's controlled functions.
-         */
         if (
             currentOwner != address(0) &&
             !marketplaceTransfer

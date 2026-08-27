@@ -1,6 +1,6 @@
-// ============================================================
+
 // MY SPONSORSHIPS
-// ============================================================
+
 
 async function loadMySponsorships() {
   const sponsorshipsGrid =
@@ -129,9 +129,9 @@ async function loadMySponsorships() {
 }
 
 
-// ============================================================
+
 // CREATE SPONSORSHIP CARD
-// ============================================================
+
 
 function createSponsorshipCard(
   leopard
@@ -300,9 +300,8 @@ function createSponsorshipCard(
   `;
 
 
-  // ----------------------------------------------------------
   // LIST FOR SALE
-  // ----------------------------------------------------------
+  
 
   const listButton =
     card.querySelector(
@@ -331,10 +330,9 @@ function createSponsorshipCard(
   }
 
 
-  // ----------------------------------------------------------
+  
   // CANCEL SALE
-  // ----------------------------------------------------------
-
+  
   const cancelButton =
     card.querySelector(
       ".cancel-sale-btn"
@@ -352,10 +350,9 @@ function createSponsorshipCard(
   }
 
 
-  // ----------------------------------------------------------
+  
   // TRANSFER
-  // ----------------------------------------------------------
-
+  
   const transferButton =
     card.querySelector(
       ".transfer-btn"
@@ -383,9 +380,9 @@ function createSponsorshipCard(
   }
 
 
-  // ----------------------------------------------------------
+ 
   // HISTORY
-  // ----------------------------------------------------------
+  
 
   const historyButton =
     card.querySelector(
@@ -408,9 +405,9 @@ function createSponsorshipCard(
 }
 
 
-// ============================================================
+
 // LIST CERTIFICATE FOR RESALE
-// ============================================================
+
 
 async function listCertificateForSale(
   tokenId,
@@ -500,9 +497,8 @@ async function listCertificateForSale(
 }
 
 
-// ============================================================
+
 // CANCEL RESALE LISTING
-// ============================================================
 
 async function cancelCertificateSale(
   tokenId
@@ -561,9 +557,9 @@ async function cancelCertificateSale(
 }
 
 
-// ============================================================
+
 // TRANSFER / GIFT CERTIFICATE
-// ============================================================
+
 
 async function transferCertificate(
   tokenId,
@@ -659,9 +655,9 @@ async function transferCertificate(
 }
 
 
-// ============================================================
+
 // OWNERSHIP HISTORY
-// ============================================================
+
 
 async function showCertificateHistory(
   tokenId,
@@ -839,9 +835,8 @@ async function showCertificateHistory(
 }
 
 
-// ============================================================
+
 // HISTORY ADDRESS FORMAT
-// ============================================================
 
 function formatHistoryAddress(
   address
@@ -865,9 +860,9 @@ function formatHistoryAddress(
 }
 
 
-// ============================================================
+
 // CLOSE HISTORY MODAL
-// ============================================================
+
 
 function closeHistoryModal() {
   const modal =
@@ -882,9 +877,9 @@ function closeHistoryModal() {
 }
 
 
-// ============================================================
+
 // STATUS MESSAGE
-// ============================================================
+
 
 function showSponsorshipsStatus(
   message,
@@ -934,9 +929,9 @@ function showSponsorshipsStatus(
 }
 
 
-// ============================================================
+
 // ERROR MESSAGE
-// ============================================================
+
 
 function getSponsorshipErrorMessage(
   error,
@@ -965,9 +960,9 @@ function getSponsorshipErrorMessage(
 }
 
 
-// ============================================================
+
 // SAFE HTML OUTPUT
-// ============================================================
+
 
 function escapeSponsorshipHTML(
   value
@@ -1003,9 +998,9 @@ function escapeSponsorshipHTML(
 }
 
 
-// ============================================================
+
 // LOAD PAGE
-// ============================================================
+
 
 document.addEventListener(
   "DOMContentLoaded",

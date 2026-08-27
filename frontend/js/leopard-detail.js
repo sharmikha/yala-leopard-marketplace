@@ -1,6 +1,5 @@
-// ============================================================
+
 // LEOPARD DETAIL PAGE
-// ============================================================
 
 function getTokenIdFromURL() {
   const params = new URLSearchParams(window.location.search);
